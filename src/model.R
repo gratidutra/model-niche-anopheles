@@ -1,6 +1,6 @@
-library(ellipsenm)
+#library(ellipsenm)
 library(kuenm)
-library(ntbox)
+#library(ntbox)
 
 #-----------------------Model candidate models----------------------------------
 
@@ -33,7 +33,7 @@ iterations <- 100
 kept <- TRUE
 selection <- "OR_AICc"
 
-kuenm_ceval(
+??kuenm_ceval(
   path = out_dir, occ.joint = occ_joint, occ.tra = occ_tra,
   occ.test = occ_test, batch = batch_cal, out.eval = out_eval,
   threshold = threshold, rand.percent = rand_percent,
@@ -67,12 +67,3 @@ kuenm_mod(
   write.mess = write_mess, write.clamp = write_clamp,
   maxent.path = maxent_path, args = args, wait = wait1, run = run1
 )
-
-replicates <- 
-  TRUE
-
-occ_test <- 
-  "Model_calibration/Records_with_thin/dhominis_test.csv"
-
-out_feval <- 
-  "Final_Models_evaluation"
