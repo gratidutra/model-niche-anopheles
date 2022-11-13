@@ -9,8 +9,8 @@ occ_tra <- "data/workflow_maxent/an_albimanus/an_albimanus_train.csv"
 M_var_dir <- "data/workflow_maxent/an_albimanus/Model_calibration/PCs_M"
 batch_cal <- "data/workflow_maxent/an_albimanus/Candidate_models"
 out_dir <- "data/workflow_maxent/an_albimanus/Candidate_Models"
-reg_mult <- c(0.1, 0.5)
-f_clas <- c("lq", "lqp", "q")
+reg_mult <-  c(seq(0.1, 1, 0.1), seq(2, 6, 1), 8, 10)
+f_clas <- 'all'
 args <- NULL
 maxent_path <- getwd()
 wait <- FALSE
@@ -33,7 +33,7 @@ iterations <- 100
 kept <- TRUE
 selection <- "OR_AICc"
 
-??kuenm_ceval(
+kuenm_ceval(
   path = out_dir, occ.joint = occ_joint, occ.tra = occ_tra,
   occ.test = occ_test, batch = batch_cal, out.eval = out_eval,
   threshold = threshold, rand.percent = rand_percent,

@@ -181,7 +181,6 @@ current_layer <-
     var = "bio", res = 10
   )
 
-
 dir_create("data/workflow_maxent")
 dir_create("data/workflow_maxent/bioclim_neotropic")
 
@@ -205,6 +204,60 @@ kuenm_occsplit(
   method = "random", save = T,
   name = "data/workflow_maxent/an_albimanus/an_albimanus"
 )
+
+# Data Exploration -----------------------------------------------------------------
+
+## only temperature variables
+
+explore_espace(
+  data =  sp_data_list[[1]], species = "species", longitude = "longitude",
+  latitude = "latitude", raster_layers = current_layear[[1:11]], save = T,
+  name = "outputs/an_albimanus/Temperature_variables.pdf"
+)
+
+## only precipitation variables
+
+explore_espace(
+  data = sp_data_list[[1]], species = "species", longitude = "longitude",
+  latitude = "latitude", raster_layers = current_layear[[12:19]], save = T,
+  name = "outputs/an_albimanus/Precipitation_variables.pdf"
+)
+
+# low corr
+
+lcor <- c(1, 2, 12, 14, 15)
+
+# exploring variable correlation in one plot for all
+
+jpeg("outputs/an_albimanus/corrplot_bioclim.jpg",
+     width = 120,
+     height = 120, units = "mm", res = 600
+)
+par(cex = 0.8)
+vcor <- variable_correlation(current_layear,
+                             save = T, name = "outputs/an_albimanus/correlation_bioclim",
+                             corrplot = T, magnify_to = 3
+)
+
+dev.off()
+
+# variables selected were bio: 1, 2, 12, 14, 15
+
+dir_create("data/workflow_maxent/an_albimanus/Model_calibration/Raw_variables_bio_lcor")
+dir_create("data/workflow_maxent/an_albimanus/Model_calibration/M_variables")
+
+file.copy(
+  from = paste0("data/workflow_maxent/bioclim_neotropic/bio", lcor, ".asc"),
+  to = paste0("data/workflow_maxent/an_albimanus/Model_calibration/Raw_variables_bio_lcor/bio", lcor, ".asc")
+)
+
+# vs <-
+#   kuenm_varcomb(
+#     var.dir = "data/workflow_maxent/Model_calibration/Raw_variables_bio_lcor",
+#     out.dir = "data/workflow_maxent/Model_calibration/M_variables",
+#     min.number = 7, in.format = "ascii", out.format = "ascii"
+#   )
+
 
 #------------------Principal component analysis and projections-----------------
 # PCA and projections
