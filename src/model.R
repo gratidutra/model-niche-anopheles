@@ -6,7 +6,7 @@ library(kuenm)
 
 occ_joint <- "data/workflow_maxent/an_albimanus/an_albimanus_joint.csv"
 occ_tra <- "data/workflow_maxent/an_albimanus/an_albimanus_train.csv"
-M_var_dir <- "data/workflow_maxent/an_albimanus/Model_calibration/PCs_M"
+M_var_dir <- "data/workflow_maxent/an_albimanus/Model_calibration/M_variables"
 batch_cal <- "data/workflow_maxent/an_albimanus/Candidate_models"
 out_dir <- "data/workflow_maxent/an_albimanus/Candidate_Models"
 reg_mult <-  c(seq(0.1, 1, 0.1), seq(2, 6, 1), 8, 10)
@@ -39,6 +39,7 @@ kuenm_ceval(
   threshold = threshold, rand.percent = rand_percent,
   iterations = iterations, kept = kept, selection = selection
 )
+
 
 #----------------------------------Final Models ---------------------
 
