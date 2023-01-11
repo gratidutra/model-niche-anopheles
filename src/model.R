@@ -179,4 +179,3 @@ kuenm_mmop <- function(G.var.dir, M.var.dir, is.swd, sets.var, out.mop, percent 
       }
     }
     
-plot(mop_res)
