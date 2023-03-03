@@ -39,7 +39,7 @@ data_by_species <- function(data, list_species, col_long = "longitude",
       select(-inout)
     list_data_thin[[i]] <- thin_data(list_data[[i]], col_long, col_lat,
       thin_distance = thin_dist, save = T,
-      name = paste0(path, "/", list_data[[i]]$species[1], ".csv")
+      name = paste0(path, "/", list_data[[i]]$species[1])
     )
   }
   result <- c(list_data, list_data_thin)

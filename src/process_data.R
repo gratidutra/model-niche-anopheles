@@ -12,9 +12,8 @@ library(sf)
 library(ellipsenm)
 library(kuenm)
 
-source("functions.R")
+source("src/functions.R")
 
-funtions
 df <-
   read.table("data/raw/all_anopheles.txt", header = T) %>%
   rename(
@@ -205,7 +204,7 @@ kuenm_occsplit(
   name = "data/workflow_maxent/an_albimanus/an_albimanus"
 )
 
-# Data Exploration -----------------------------------------------------------------
+# Data Exploratory -----------------------------------------------------------------
 
 ## only temperature variables
 
