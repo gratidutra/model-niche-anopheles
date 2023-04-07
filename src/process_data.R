@@ -11,6 +11,7 @@ library(tmap)
 library(sf)
 library(ellipsenm)
 library(kuenm)
+library(ntbox)
 
 source("src/functions.R")
 
@@ -141,11 +142,21 @@ anopheles_processed2["inout"] <- over(
 )
 
 # dropando pontos fora do shape
+species_with_100 <- 
+  anopheles_processed2 %>% 
+  group_by(species) %>% 
+  count() %>% 
+  filter(n >= 100) %>% 
+  select(species) %>% 
+  list()
 
 anopheles_processed3 <-
   anopheles_processed2 %>%
-  drop_na(.)
-
+  dplyr::filter(species %in% species_with_100) %>% 
+  rename(latitude = decimalLatitude, longitude = decimalLongitude) %>%
+  drop_na(.) %>% 
+  select(species, longitude, latitude)
+  
 # salvando csv
 
 write.csv(anopheles_processed3, "data/processed/anopheles_processed.csv")
@@ -154,7 +165,7 @@ write.csv(anopheles_processed3, "data/processed/anopheles_processed.csv")
 
 kmeans <-
   anopheles_processed3 %>%
-  group_by(decimalLatitude, decimalLongitude) %>%
+  group_by(latitude, longitude) %>%
   summarise(rich = n_distinct(species))
 
 write.csv(kmeans, "data/processed/kmeans.csv")
@@ -164,7 +175,7 @@ write.csv(kmeans, "data/processed/kmeans.csv")
 
 anopheles_points_plot <-
   anopheles_processed3 %>%
-  st_as_sf(coords = c("decimalLongitude", "decimalLatitude"), crs = 4326) %>%
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
   st_cast("POINT")
 
 tm_shape(neotropic) +
@@ -233,9 +244,11 @@ jpeg("outputs/an_albimanus/corrplot_bioclim.jpg",
      height = 120, units = "mm", res = 600
 )
 par(cex = 0.8)
-vcor <- variable_correlation(current_layear,
-                             save = T, name = "outputs/an_albimanus/correlation_bioclim",
-                             corrplot = T, magnify_to = 3
+vcor <- 
+  variable_correlation(
+    current_layear,
+    save = T, name = "outputs/an_albimanus/correlation_bioclim",
+    corrplot = T, magnify_to = 3
 )
 
 dev.off()

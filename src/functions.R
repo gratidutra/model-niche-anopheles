@@ -35,7 +35,6 @@ data_by_species <- function(data, list_species, col_long = "longitude",
   for (i in seq_along(list_species)) {
     list_data[[i]] <- data %>%
       dplyr::filter(species == list_species[[i]]) %>%
-      rename(latitude = decimalLatitude, longitude = decimalLongitude) %>%
       select(-inout)
     list_data_thin[[i]] <- thin_data(list_data[[i]], col_long, col_lat,
       thin_distance = thin_dist, save = T,
