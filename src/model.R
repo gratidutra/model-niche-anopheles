@@ -9,8 +9,8 @@ occ_tra <- "data/workflow_maxent/an_albimanus/an_albimanus_train.csv"
 M_var_dir <- "data/workflow_maxent/an_albimanus/Model_calibration/M_variables"
 batch_cal <- "data/workflow_maxent/an_albimanus/Candidate_models"
 out_dir <- "data/workflow_maxent/an_albimanus/Candidate_Models"
-reg_mult <-  c(seq(0.1, 1, 0.1), seq(2, 6, 1), 8, 10)
-f_clas <- 'all'
+reg_mult <- c(0.2,0.5,1,2)
+f_clas <- c('q')
 args <- NULL
 maxent_path <- getwd()
 wait <- FALSE

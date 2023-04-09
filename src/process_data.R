@@ -43,9 +43,9 @@ occ_anopheles <- occ_download(
   email = "gratirodrigues.gdr@gmail.com"
 )
 
-z <- occ_download_get(occ_anopheles)
-
-all_species <- occ_download_import(z)
+all_species <- 
+  occ_download_get(key = '0155603-230224095556074', overwrite = TRUE) %>% 
+  occ_download_import
 
 all_species_gbif <-
   all_species %>%
@@ -65,7 +65,8 @@ all_species_splink_raw <-
     CoordinatesQuality = "Good"
   )
 
-all_species_splink <- all_species_splink_raw %>%
+all_species_splink <- 
+  all_species_splink_raw %>%
   rename(species = scientificName) %>%
   select(species, decimalLatitude, decimalLongitude) %>%
   mutate(
@@ -188,14 +189,15 @@ current_layer <-
     "worldclim",
     var = "bio", res = 10
   )
+class(current_layer)
 
 dir_create("data/workflow_maxent")
-dir_create("data/workflow_maxent/bioclim_neotropic")
+dir_create("data/bioclim_neotropic")
 
 raster_neotropic_list <-
-  crop_raster(current_layer@layers, neotropic, "data/workflow_maxent/bioclim_neotropic")
+  crop_raster(current_layer@layers, neotropic, "data/bioclim_neotropic")
 
-
+current_neotropic_layer <- stack(raster_neotropic_list)
 #  buffer & split ---------------------------------------------------------
 
 dir_create("data/processed/data_by_specie")
@@ -203,7 +205,7 @@ dir_create("data/workflow_maxent/an_albimanus")
 
 sp_data_list <-
   data_by_species(anopheles_processed3, 
-                  sp_list, 
+                  species_with_100$species, 
                   path = "data/processed/data_by_specie")
 
 # split para uma espécie
@@ -221,7 +223,7 @@ kuenm_occsplit(
 
 explore_espace(
   data =  sp_data_list[[1]], species = "species", longitude = "longitude",
-  latitude = "latitude", raster_layers = current_layear[[1:11]], save = T,
+  latitude = "latitude", raster_layers = current_neotropic_layer[[1:11]], save = T,
   name = "outputs/an_albimanus/Temperature_variables.pdf"
 )
 
@@ -229,13 +231,13 @@ explore_espace(
 
 explore_espace(
   data = sp_data_list[[1]], species = "species", longitude = "longitude",
-  latitude = "latitude", raster_layers = current_layear[[12:19]], save = T,
+  latitude = "latitude", raster_layers = current_neotropic_layer[[12:19]], save = T,
   name = "outputs/an_albimanus/Precipitation_variables.pdf"
 )
 
 # low corr
 
-lcor <- c(1, 2, 12, 14, 15)
+lcor <- c(1, 2, 3, 4, 12, 15, 18)
 
 # exploring variable correlation in one plot for all
 
@@ -246,7 +248,7 @@ jpeg("outputs/an_albimanus/corrplot_bioclim.jpg",
 par(cex = 0.8)
 vcor <- 
   variable_correlation(
-    current_layear,
+    current_neotropic_layer,
     save = T, name = "outputs/an_albimanus/correlation_bioclim",
     corrplot = T, magnify_to = 3
 )
@@ -259,7 +261,7 @@ dir_create("data/workflow_maxent/an_albimanus/Model_calibration/Raw_variables_bi
 dir_create("data/workflow_maxent/an_albimanus/Model_calibration/M_variables")
 
 file.copy(
-  from = paste0("data/workflow_maxent/bioclim_neotropic/bio", lcor, ".asc"),
+  from = paste0("data/bioclim_neotropic/bio", lcor, ".asc"),
   to = paste0("data/workflow_maxent/an_albimanus/Model_calibration/Raw_variables_bio_lcor/bio", lcor, ".asc")
 )
 
@@ -275,21 +277,26 @@ file.copy(
 # PCA and projections
 dir.create("data/workflow_maxent/an_albimanus/pcas")
 dir.create("data/workflow_maxent/an_albimanus/pcas/pca_referenceLayers")
-dir.create("data/workflow_maxent/pcas/pca_proj")
+dir.create("data/workflow_maxent/an_albimanus/pcas/pca_proj")
 
 s1 <- 
   spca(
-    layers_stack = raster_neotropic_list, layers_to_proj = raster_neotropic_list,
+    layers_stack = current_neotropic_layer, layers_to_proj = current_neotropic_layer,
     sv_dir = "data/workflow_maxent/an_albimanus/pcas/pca_referenceLayers", 
     layers_format = ".asc",
     sv_proj_dir = "data/workflow_maxent/an_albimanus/pcas/pca_proj"
   )
 
 # Read the pca object (output from ntbox function)
+lf <-
+  list.files(
+    path = paste0("data/workflow_maxent/an_albimanus/pcas/pca_referenceLayers"),
+    pattern = "\\.rds$", full.names = TRUE
+  )
 
 f1 <- 
   readRDS(
-    "data/workflow_maxent/an_albimanus/pcas/pca_referenceLayers/pca_object22_10_01_19_16.rds"
+    lf
   )
 
 # Summary
@@ -302,7 +309,7 @@ dir_create('outputs')
 dir_create('outputs/an_albimanus')
 
 png(
-  filename = "outputs/an_albimanus/screeplot_an_albimanus.png",
+  filename = "outputs/an_albimanus/screeplot.png",
   width = 1200 * 1.3, height = 1200 * 1.3, res = 300
 )
 plot(f2$importance[3, 1:5] * 100,
@@ -348,3 +355,4 @@ file.copy(
     ".asc"
   )
 )
+

@@ -44,6 +44,6 @@ data_by_species <- function(data, list_species, col_long = "longitude",
       name = paste0(path, "/", list_data[[i]]$species[1])
     )
   }
-  result <- c(list_data, list_data_thin)
+  result <- c(list_data_thin)
   return(result)
 }
