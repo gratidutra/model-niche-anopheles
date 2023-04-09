@@ -1,8 +1,9 @@
 source("src/functions.R")
 
+sp_data_list <- species_with_100$species
+
 for (i in seq_along(sp_data_list)) {
   
-  if (dim(sp_data_list[[i]][[1]])[1] > 100) {
     sp_name <- sp_data_list[[i]]$species[1]
 
     dir_create(paste0("data/workflow_maxent/", sp_name))
@@ -50,19 +51,21 @@ for (i in seq_along(sp_data_list)) {
 
     # Read the pca object (output from ntbox function)
 
-    # lf <-
-    #   list.files(
-    #     path = paste0("data/workflow_maxent", sp_name, "/pcas/pca_referenceLayers"),
-    #     pattern = "\\.rds$", full.names = TRUE
-    #   )
-    #
-    # f1 <-
-    #   readRDS(lf)
+    lf <-
+      list.files(
+        path = paste0("data/workflow_maxent/", sp_name, "/pcas/pca_referenceLayers"),
+        pattern = "\\.rds$", full.names = TRUE
+      )
+    
+    print(lf)
+
+    f1 <-
+      readRDS(lf)
 
     # Summary
 
     f2 <-
-      summary(s1)
+      summary(f1)
 
     # The scree plot
     #
@@ -113,4 +116,4 @@ for (i in seq_along(sp_data_list)) {
       )
     )
   }
-}
+

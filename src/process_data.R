@@ -146,13 +146,11 @@ species_with_100 <-
   anopheles_processed2 %>% 
   group_by(species) %>% 
   count() %>% 
-  filter(n >= 100) %>% 
-  select(species) %>% 
-  list()
+  filter(n >= 100) 
 
 anopheles_processed3 <-
   anopheles_processed2 %>%
-  dplyr::filter(species %in% species_with_100) %>% 
+  dplyr::filter(species %in% species_with_100$species) %>% 
   rename(latitude = decimalLatitude, longitude = decimalLongitude) %>%
   drop_na(.) %>% 
   select(species, longitude, latitude)
@@ -204,12 +202,14 @@ dir_create("data/processed/data_by_specie")
 dir_create("data/workflow_maxent/an_albimanus")
 
 sp_data_list <-
-  data_by_species(anopheles_processed3, splist, path = "data/processed/data_by_specie")
+  data_by_species(anopheles_processed3, 
+                  sp_list, 
+                  path = "data/processed/data_by_specie")
 
 # split para uma espécie
 
 kuenm_occsplit(
-  occ = sp_data_list[[1]], 
+  occ = sp_data_list[[40]], 
   train.proportion = 0.7,
   method = "random", save = T,
   name = "data/workflow_maxent/an_albimanus/an_albimanus"
@@ -300,7 +300,6 @@ f2 <-
 # The scree plot
 dir_create('outputs')
 dir_create('outputs/an_albimanus')
-
 
 png(
   filename = "outputs/an_albimanus/screeplot_an_albimanus.png",
