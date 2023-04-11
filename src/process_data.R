@@ -49,7 +49,7 @@ all_species <-
 
 all_species_gbif <-
   all_species %>%
-  select(species, decimalLatitude, decimalLongitude) %>%
+  dplyr::select(species, decimalLatitude, decimalLongitude) %>%
   drop_na()
 
 
@@ -68,7 +68,7 @@ all_species_splink_raw <-
 all_species_splink <- 
   all_species_splink_raw %>%
   rename(species = scientificName) %>%
-  select(species, decimalLatitude, decimalLongitude) %>%
+  dplyr::select(species, decimalLatitude, decimalLongitude) %>%
   mutate(
     decimalLatitude = as.numeric(decimalLatitude),
     decimalLongitude = as.numeric(decimalLongitude)
@@ -153,7 +153,7 @@ anopheles_processed3 <-
   dplyr::filter(species %in% species_with_100$species) %>% 
   rename(latitude = decimalLatitude, longitude = decimalLongitude) %>%
   drop_na(.) %>% 
-  select(species, longitude, latitude)
+  dplyr::select(species, longitude, latitude)
   
 # salvando csv
 
@@ -188,11 +188,13 @@ current_layer <-
     var = "bio", res = 10
   )
 
+# Future ------------------------------------------------------------------
 future_layer_cc_85 <-
   getData('CMIP5', 
           var='bio', 
           res=10, rcp=85, 
           model='CC', year=70)
+
 geodata::worldclim_global(
   var = bio, res = 10, path = getwd()
 )
@@ -204,6 +206,8 @@ future_layer_mc_60 <-
           var = 'bioc',
           res=10, path = getwd())
 
+# Crop_layers -------------------------------------------------------------
+
 dir_create("data/workflow_maxent")
 dir_create("data/bioclim_neotropic")
 
@@ -211,6 +215,7 @@ raster_neotropic_list <-
   crop_raster(current_layer@layers, neotropic, "data/bioclim_neotropic")
 
 current_neotropic_layer <- stack(raster_neotropic_list)
+
 #  buffer & split ---------------------------------------------------------
 
 dir_create("data/processed/data_by_specie")

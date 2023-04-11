@@ -2,11 +2,11 @@ library(kuenm)
 
 #-----------------------Model candidate models----------------------------------
 
-occ_joint <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_joint.csv"
-occ_tra <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_train.csv"
-M_var_dir <- "data/workflow_maxent/Anopheles albimanus/Model_calibration/M_variables"
-batch_cal <- "data/workflow_maxent/Anopheles albimanus/Candidate_models"
-out_dir <- "data/workflow_maxent/Anopheles albimanus/Candidate_Models"
+occ_joint <- "data/workflow_maxent/Anopheles_albimanus/Anopheles_albimanus_joint.csv"
+occ_tra <- "data/workflow_maxent/Anopheles_albimanus/Anopheles_albimanus_train.csv"
+M_var_dir <- "data/workflow_maxent/Anopheles_albimanus/Model_calibration/M_variables"
+batch_cal <- "data/workflow_maxent/Anopheles_albimanus/Candidate_models"
+out_dir <- "data/workflow_maxent/Anopheles_albimanus/Candidate_Models"
 reg_mult <- c(0.2,0.5,1,2)
 f_clas <- c('q')
 args <- NULL
@@ -23,8 +23,8 @@ kuenm_cal(
 
 #-----------------------Model evaluating models---------------------------------
 
-occ_test <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_train.csv"
-out_eval <- "data/workflow_maxent/Anopheles albimanus/Calibration_results"
+occ_test <- "data/workflow_maxent/Anopheles_albimanus/Anopheles_albimanus_train.csv"
+out_eval <- "data/workflow_maxent/Anopheles_albimanus/Calibration_results"
 threshold <- 5
 rand_percent <- 50
 iterations <- 100
