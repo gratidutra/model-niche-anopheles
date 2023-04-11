@@ -74,7 +74,6 @@ all_species_splink <-
     decimalLongitude = as.numeric(decimalLongitude)
   )
 
-
 # Unindo e tratando o df final--------------------------------------------------
 
 anopheles_df <-
@@ -169,7 +168,6 @@ kmeans <-
 
 write.csv(kmeans, "data/processed/kmeans.csv")
 
-
 # criando objeto pro plot via tmap e plotando
 
 anopheles_points_plot <-
@@ -189,7 +187,22 @@ current_layer <-
     "worldclim",
     var = "bio", res = 10
   )
-class(current_layer)
+
+future_layer_cc_85 <-
+  getData('CMIP5', 
+          var='bio', 
+          res=10, rcp=85, 
+          model='CC', year=70)
+geodata::worldclim_global(
+  var = bio, res = 10, path = getwd()
+)
+
+future_layer_mc_60 <-
+  geodata::cmip6_world('MIROC6', 
+          ssp='585', 
+          time = "2041-2060",
+          var = 'bioc',
+          res=10, path = getwd())
 
 dir_create("data/workflow_maxent")
 dir_create("data/bioclim_neotropic")

@@ -1,14 +1,12 @@
-#library(ellipsenm)
 library(kuenm)
-#library(ntbox)
 
 #-----------------------Model candidate models----------------------------------
 
-occ_joint <- "data/workflow_maxent/an_albimanus/an_albimanus_joint.csv"
-occ_tra <- "data/workflow_maxent/an_albimanus/an_albimanus_train.csv"
-M_var_dir <- "data/workflow_maxent/an_albimanus/Model_calibration/M_variables"
-batch_cal <- "data/workflow_maxent/an_albimanus/Candidate_models"
-out_dir <- "data/workflow_maxent/an_albimanus/Candidate_Models"
+occ_joint <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_joint.csv"
+occ_tra <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_train.csv"
+M_var_dir <- "data/workflow_maxent/Anopheles albimanus/Model_calibration/M_variables"
+batch_cal <- "data/workflow_maxent/Anopheles albimanus/Candidate_models"
+out_dir <- "data/workflow_maxent/Anopheles albimanus/Candidate_Models"
 reg_mult <- c(0.2,0.5,1,2)
 f_clas <- c('q')
 args <- NULL
@@ -25,8 +23,8 @@ kuenm_cal(
 
 #-----------------------Model evaluating models---------------------------------
 
-occ_test <- "data/workflow_maxent/an_albimanus/an_albimanus_test.csv"
-out_eval <- "data/workflow_maxent/an_albimanus/Calibration_results"
+occ_test <- "data/workflow_maxent/Anopheles albimanus/Anopheles albimanus_train.csv"
+out_eval <- "data/workflow_maxent/Anopheles albimanus/Calibration_results"
 threshold <- 5
 rand_percent <- 50
 iterations <- 100
@@ -43,16 +41,16 @@ kuenm_ceval(
 
 #----------------------------------Final Models ---------------------
 
-dir.create("data/workflow_maxent/an_albimanus/Final_models")
+dir.create("data/workflow_maxent/an_albimanus_2/Final_models")
 
-batch_fin <- "data/workflow_maxent/an_albimanus/Final_models"
-mod_dir <- "data/workflow_maxent/an_albimanus/Final_models"
+batch_fin <- "data/workflow_maxent/an_albimanus_2/Final_models"
+mod_dir <- "data/workflow_maxent/an_albimanus_2/Final_models"
 rep_n <- 5
 rep_type <- "Bootstrap"
 jackknife <- TRUE
 out_format <- "logistic"
 project <- TRUE
-G_var_dir <- "data/workflow_maxent/an_albimanus/G_Variables"
+G_var_dir <- "data/workflow_maxent/an_albimanus_2/G_Variables"
 ext_type <- "all"
 write_mess <- FALSE
 write_clamp <- FALSE
@@ -70,9 +68,9 @@ kuenm_mod(
 )
 
 
-occ_ind <-  "data/workflow_maxent/an_albimanus/an_albimanus_test.csv"
+occ_ind <-  "data/workflow_maxent/an_albimanus_2_2/an_albimanus_2_test.csv"
 replicates <- TRUE
-out_feval <- "data/workflow_maxent/an_albimanus/Final_Models_evaluation"
+out_feval <- "data/workflow_maxent/an_albimanus_2_2/Final_Models_evaluation"
 # Most of the variables used here as arguments were already created for previous functions
 
 
@@ -81,7 +79,7 @@ fin_eval <- kuenm_feval(path = mod_dir, occ.joint = occ_joint, occ.ind = occ_ind
                         iterations = iterations, parallel.proc = TRUE)
 
 sets_var <- "Set1" # a vector of various sets can be used
-out_mop <- "data/workflow_maxent/an_albimanus/MOP_results"
+out_mop <- "data/workflow_maxent/an_albimanus_2/MOP_results"
 percent <- 10
 paral <- FALSE 
 

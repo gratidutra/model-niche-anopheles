@@ -1,15 +1,18 @@
 source("src/functions.R")
+library(stringr)
 
 for (i in seq_along(sp_data_list)) {
   
     sp_name <- sp_data_list[[i]]$species[1]
+    
+    sp_name <- str_replace_all(string=sp_name, pattern=" ", repl="_")
 
     dir_create(paste0("data/workflow_maxent/", sp_name))
     dir_create(paste0("data/workflow_maxent/", sp_name,"/outputs/"))
     dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration"))
     dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables"))
-    dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/bio_lcor"))
-    dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/PCA"))
+    dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/Set_1"))
+    dir_create(paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/Set_2"))
     dir.create(paste0("data/workflow_maxent/", sp_name, "/pcas"))
     dir.create(paste0("data/workflow_maxent/", sp_name, "/pcas/pca_referenceLayers"))
     dir.create(paste0("data/workflow_maxent/", sp_name, "/pcas/pca_proj"))
@@ -63,12 +66,6 @@ for (i in seq_along(sp_data_list)) {
 
     f2 <-
       summary(f1)
-    
-    # save the cumulative contributions PCA
-    
-    sink("data/workflow_maxent/", sp_name,"/outputs/cumulative_pca.txt")
-    print(f2)
-    sink()
 
     # The scree plot
 
@@ -91,28 +88,28 @@ for (i in seq_along(sp_data_list)) {
       dev.off()
 
     # PCs used were pc: 1, 2, 3, 4,
-      
+
     nums <- 1:4
 
     file.copy(
       from = paste0("data/workflow_maxent/", sp_name, "/pcas/pca_referenceLayers/PC0", nums, ".asc"),
-      to = paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/PCA/PC0", nums, ".asc")
+      to = paste0("data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/Set_2/PC0", nums, ".asc")
     )
 
     dir_create(paste0("data/workflow_maxent/", sp_name, "/G_Variables"))
-    dir_create(paste0("data/workflow_maxent/", sp_name, "/G_Variables/Set_1"))
-    dir_create(paste0("data/workflow_maxent/", sp_name, "/G_Variables/Set_1/Current"))
+    dir_create(paste0("data/workflow_maxent/", sp_name, "/G_Variables/Set_2"))
+    dir_create(paste0("data/workflow_maxent/", sp_name, "/G_Variables/Set_2/Current"))
 
     # Aqui da para testar o var comb
 
     file.copy(
       from = paste0(
-        "data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/PCA/PC0",
+        "data/workflow_maxent/", sp_name, "/Model_calibration/M_variables/Set_2/PC0",
         nums,
         ".asc"
       ),
       to = paste0(
-        "data/workflow_maxent/", sp_name, "/G_Variables/Set_1/Current/PC0",
+        "data/workflow_maxent/", sp_name, "/G_Variables/Set_2/Current/PC0",
         nums,
         ".asc"
       )
