@@ -182,29 +182,71 @@ tm_shape(neotropic) +
 
 # download camadas present e recorte
 
-current_layer <-
-  getData(
-    "worldclim",
-    var = "bio", res = 10
-  )
-
-# Future ------------------------------------------------------------------
-future_layer_cc_85 <-
-  getData('CMIP5', 
-          var='bio', 
-          res=10, rcp=85, 
-          model='CC', year=70)
-
-geodata::worldclim_global(
-  var = bio, res = 10, path = getwd()
+current_layer <- 
+  geodata::worldclim_global(
+  "bio",
+  res = 10,
+  path = getwd()
 )
 
-future_layer_mc_60 <-
-  geodata::cmip6_world('MIROC6', 
-          ssp='585', 
+# Future ------------------------------------------------------------------
+future_layer_mc_126_60 <-
+  geodata::cmip6_world(model='MIROC6', 
+                       ssp='126', 
+                       time = "2041-2060",
+                       var = 'bioc',
+                       res=10, path = getwd())
+
+crop_raster_cmip6(
+  future_layer_mc_126_60, neotropic, "data/future_layer_mc_126_60")
+
+future_layer_mc_585_60 <-
+  geodata::cmip6_world(model='MIROC6', 
+                       ssp='585', 
+                       time = "2041-2060",
+                       var = 'bioc',
+                       res=10, path = getwd()
+                       )
+
+crop_raster_cmip6(
+  future_layer_mc_585_60, neotropic, "data/future_layer_mc_585_60")
+
+# future_layer_mc_126_60 <- 
+#   brick(future_layer_mc_126_60)
+# 
+# future_neotropic_mc_126_60 <-
+#   raster::crop(future_layer_mc_126_60, neotropic)
+# 
+# dir_create('data/future_neotropic_mc_126_60')
+# 
+# for (i in 1:19) {
+#   writeRaster(future_neotropic_mc_126_60[[i]],
+#     paste0("data/future_neotropic_mc_126_60/bio", i, ".asc"),
+#     overwrite = T
+#   )
+# }
+
+
+
+# - -----------------------------------------------------------------------
+future_layer_mc_585_60 <-
+  geodata::cmip6_world(model='CanESM5', 
+          ssp='160', 
           time = "2041-2060",
           var = 'bioc',
           res=10, path = getwd())
+
+future_layer_mc_585_60 <- 
+  brick(future_layer_mc_585_60)
+
+future_layer_mc_585_60 <-
+  geodata::cmip6_world(model='CanESM5', 
+                       ssp='585', 
+                       time = "2041-2060",
+                       var = 'bioc',
+                       res=10, path = getwd())
+
+future_layer_mc_585_60 <- brick(future_layer_mc_585_60)
 
 # Crop_layers -------------------------------------------------------------
 
@@ -212,7 +254,8 @@ dir_create("data/workflow_maxent")
 dir_create("data/bioclim_neotropic")
 
 raster_neotropic_list <-
-  crop_raster(current_layer@layers, neotropic, "data/bioclim_neotropic")
+  crop_raster(current_layer@layers, neotropic, 
+              "data/bioclim_neotropic")
 
 current_neotropic_layer <- stack(raster_neotropic_list)
 

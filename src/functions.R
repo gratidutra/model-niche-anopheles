@@ -3,7 +3,7 @@
 dir_create <- function(dir_name) {
   if (!file.exists(dir_name)) {
     dir.create(dir_name)
-    print("diretório criado")
+    print(paste("diretório criado", dir_name))
   } else {
     print("diretório já existe")
   }
@@ -11,7 +11,8 @@ dir_create <- function(dir_name) {
 
 # função pra cortar camadas
 
-crop_raster <- function(raster_list, shp, path) {
+crop_raster_cmpi5 <- 
+  function(raster_list, shp, path) {
   new_raster_list <- list()
   i <- 1
   while (i <= length(raster_list)) {
@@ -25,6 +26,28 @@ crop_raster <- function(raster_list, shp, path) {
   }
   return(new_raster_list)
 }
+
+# função pra cortar camadas do cmip6
+
+crop_raster_cmip6 <-
+  function(spat_raster, shape, name_path) {
+    
+    brick_layer <-
+      brick(spat_raster)
+    
+    croped_layer <-
+      raster::crop(brick_layer, shape)
+    
+    dir_create(name_path)
+    
+    for (i in 1:19) {
+      writeRaster(croped_layer[[i]],
+                  paste0(name_path, "/bio", i, ".asc"),
+                  overwrite = T
+      )
+    }
+    return(croped_layer)
+  }
 
 # função para splitar dataframes por espécies
 
