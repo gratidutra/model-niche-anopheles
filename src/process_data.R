@@ -188,6 +188,12 @@ current_layer <-
   res = 10,
   path = getwd()
 )
+class(current_layer)
+
+current <- 
+  crop_raster_cmip6(
+    current_layer, neotropic,
+    "data/current_layer")
 
 # Future ------------------------------------------------------------------
 future_layer_mc_126_60 <-
@@ -197,8 +203,10 @@ future_layer_mc_126_60 <-
                        var = 'bioc',
                        res=10, path = getwd())
 
-crop_raster_cmip6(
-  future_layer_mc_126_60, neotropic, "data/future_layer_mc_126_60")
+mc_126 <- 
+  crop_raster_cmip6(
+  future_layer_mc_126_60, neotropic, 
+  "data/future_layer_mc_126_60")
 
 future_layer_mc_585_60 <-
   geodata::cmip6_world(model='MIROC6', 
@@ -208,8 +216,34 @@ future_layer_mc_585_60 <-
                        res=10, path = getwd()
                        )
 
-crop_raster_cmip6(
-  future_layer_mc_585_60, neotropic, "data/future_layer_mc_585_60")
+mc_585 <- crop_raster_cmip6(
+  future_layer_mc_585_60, neotropic, 
+  "data/future_layer_mc_585_60")
+
+future_layer_can_126_60 <-
+  geodata::cmip6_world(model='CanESM5', 
+                       ssp='126', 
+                       time = "2041-2060",
+                       var = 'bioc',
+                       res=10, path = getwd())
+
+can_126 <- 
+  crop_raster_cmip6(
+  future_layer_can_126_60, neotropic, 
+  "data/future_layer_can_126_60")
+
+future_layer_can_585_60 <-
+  geodata::cmip6_world(model='CanESM5', 
+                       ssp='585', 
+                       time = "2041-2060",
+                       var = 'bioc',
+                       res=10, path = getwd()
+  )
+
+can_585 <- 
+  crop_raster_cmip6(
+  future_layer_can_585_60, neotropic, 
+  "data/future_layer_can_585_60")
 
 # future_layer_mc_126_60 <- 
 #   brick(future_layer_mc_126_60)
@@ -226,29 +260,7 @@ crop_raster_cmip6(
 #   )
 # }
 
-
-
-# - -----------------------------------------------------------------------
-future_layer_mc_585_60 <-
-  geodata::cmip6_world(model='CanESM5', 
-          ssp='160', 
-          time = "2041-2060",
-          var = 'bioc',
-          res=10, path = getwd())
-
-future_layer_mc_585_60 <- 
-  brick(future_layer_mc_585_60)
-
-future_layer_mc_585_60 <-
-  geodata::cmip6_world(model='CanESM5', 
-                       ssp='585', 
-                       time = "2041-2060",
-                       var = 'bioc',
-                       res=10, path = getwd())
-
-future_layer_mc_585_60 <- brick(future_layer_mc_585_60)
-
-# Crop_layers -------------------------------------------------------------
+# Crop_layers CMIP5-------------------------------------------------------------
 
 dir_create("data/workflow_maxent")
 dir_create("data/bioclim_neotropic")
@@ -259,7 +271,7 @@ raster_neotropic_list <-
 
 current_neotropic_layer <- stack(raster_neotropic_list)
 
-#  buffer & split ---------------------------------------------------------
+# buffer & split ---------------------------------------------------------
 
 dir_create("data/processed/data_by_specie")
 dir_create("data/workflow_maxent/an_albimanus")
@@ -280,11 +292,23 @@ kuenm_occsplit(
 
 # Data Exploratory -----------------------------------------------------------------
 
+# corr_table --------------------------------------------------------------
+# an_alb_df <- as.data.frame(sp_data_list[[1]])
+# 
+# coordinates(an_alb_df)= ~longitude+latitude
+# 
+# rasValue=raster::extract(current, sp_data_list[[1]] %>% 
+#                            dplyr::select(longitude, latitude))
+# 
+# View(rasValue %>% 
+#   corrr::correlate() %>% 
+#   filter())
+
 ## only temperature variables
 
 explore_espace(
   data =  sp_data_list[[1]], species = "species", longitude = "longitude",
-  latitude = "latitude", raster_layers = current_neotropic_layer[[1:11]], save = T,
+  latitude = "latitude", raster_layers = current[[1:11]], save = T,
   name = "outputs/an_albimanus/Temperature_variables.pdf"
 )
 
@@ -292,7 +316,7 @@ explore_espace(
 
 explore_espace(
   data = sp_data_list[[1]], species = "species", longitude = "longitude",
-  latitude = "latitude", raster_layers = current_neotropic_layer[[12:19]], save = T,
+  latitude = "latitude", raster_layers = current[[12:19]], save = T,
   name = "outputs/an_albimanus/Precipitation_variables.pdf"
 )
 
