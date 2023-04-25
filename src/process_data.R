@@ -147,7 +147,7 @@ species_with_100 <-
   group_by(species) %>% 
   count() %>% 
   filter(n >= 100) 
-
+#dim(anopheles_processed3)
 anopheles_processed3 <-
   anopheles_processed2 %>%
   dplyr::filter(species %in% species_with_100$species) %>% 

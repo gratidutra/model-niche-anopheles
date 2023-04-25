@@ -6,7 +6,7 @@ species_name <- "Anopheles_"
 
 occ_joint <- paste0("data/workflow_maxent/",species_name,"/",species_name,"_joint.csv")
 occ_tra <- paste0("data/workflow_maxent/",species_name,"/",species_name,"_train.csv")
-M_var_dir <- paste0("data/workflow_maxent/",species_name,"/Model_calibration/M_variables")
+M_var_dir <-paste0("data/workflow_maxent/",species_name,"/Model_calibration/M_variables")
 batch_cal <-paste0("data/workflow_maxent/",species_name,"/Candidate_models")
 out_dir <- paste0("data/workflow_maxent/",species_name,"/Candidate_Models")
 reg_mult <-  c(seq(0.1, 1, 0.1), seq(2, 6, 1), 8, 10)
