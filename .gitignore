@@ -1,2 +1,13 @@
 data/
 .Rproj.user
+.Renviron
+outputs/
+callbacks/
+wc2.1_10m
+wc10/
+.Rproj
+dataset.keras
+*.zip
+.Rhistory
+.RDataTmp
+.RData

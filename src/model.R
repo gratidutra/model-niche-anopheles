@@ -1,51 +1,81 @@
 library(kuenm)
-species_name <- "m_molossus"
+species_name <- "Anopheles_apicimacula"
 # Params ------------------------------------------------------------------
 occ_joint <-
   paste0("data/workflow_maxent/", species_name, "/", species_name, "_joint.csv")
+
 occ_tra <-
   paste0("data/workflow_maxent/", species_name, "/", species_name, "_train.csv")
+
 M_var_dir <-
   paste0("data/workflow_maxent/", species_name, "/Model_calibration/M_variables")
+
 batch_cal <-
   paste0("data/workflow_maxent/", species_name, "/Candidate_models")
+
 out_dir <-
   paste0("data/workflow_maxent/", species_name, "/Candidate_Models")
+
 reg_mult <-
   c(seq(0.1, 1, 0.1), seq(2, 6, 1), 8, 10)
+
 f_clas <- "all"
+
 args <- NULL
+
 maxent_path <- "/home/grati/Documents/model-niche-anopheles"
+
 wait <- FALSE
+
 run <- TRUE
+
 occ_test <-
   paste0("data/workflow_maxent/", species_name, "/", species_name, "_test.csv")
+
 out_eval <-
   paste0("data/workflow_maxent/", species_name, "/Calibration_results")
+
 threshold <- 5
+
 rand_percent <- 50
+
 iterations <- 100
+
 kept <- TRUE
+
 selection <- "OR_AICc"
 
-dir.create(paste0("data/workflow_maxent/", species_name, "/Final_models"))
+#dir.create(paste0("data/workflow_maxent/", species_name, "/Final_models"))
 
 batch_fin <-
   paste0("data/workflow_maxent/", species_name, "/Final_models")
+
 mod_dir <-
   paste0("data/workflow_maxent/", species_name, "/Final_models")
+
 rep_n <- 5
+
 rep_type <- "Bootstrap"
+
 jackknife <- TRUE
+
 out_format <- "logistic"
+
 project <- TRUE
+
 G_var_dir <-
   paste0("data/workflow_maxent/", species_name, "/G_Variables")
+
 ext_type <- "all"
+
 write_mess <- FALSE
+
 write_clamp <- FALSE
+
 wait1 <- FALSE
+
 run1 <- TRUE
+
 args <- NULL
 
 kuenm_mod(
@@ -58,11 +88,12 @@ kuenm_mod(
 )
 
 occ_ind <- paste0("data/workflow_maxent/", species_name, "/", species_name, "_test.csv")
+
 replicates <- TRUE
+
 out_feval <- paste0("data/workflow_maxent/", species_name, "/Final_Models_evaluation")
 
 # Most of the variables used here as arguments were already created for previous functions
-
 
 fin_eval <- kuenm_feval(
   path = mod_dir, occ.joint = occ_joint, occ.ind = occ_ind, replicates = replicates,
@@ -71,8 +102,11 @@ fin_eval <- kuenm_feval(
 )
 
 sets_var <- "Set1" # a vector of various sets can be used
+
 out_mop <- paste0("data/workflow_maxent/", species_name, "/MOP_results")
+
 percent <- 10
+
 paral <- FALSE
 # comp.each = 2000
 # n.cores = NULL

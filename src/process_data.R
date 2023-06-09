@@ -39,8 +39,8 @@ occ_anopheles <- occ_download(
   pred_in("taxonKey", keys),
   pred("hasCoordinate", TRUE),
   format = "SIMPLE_CSV",
-  user = "gratidutra", pwd = "iNm!cD!U6@3LhYH",
-  email = "gratirodrigues.gdr@gmail.com"
+  user = Sys.getenv('user'), pwd = Sys.getenv('pwd'),
+  email = Sys.getenv('email')
 )
 
 all_species <- 
@@ -147,7 +147,9 @@ species_with_100 <-
   group_by(species) %>% 
   count() %>% 
   filter(n >= 100) 
+
 #dim(anopheles_processed3)
+
 anopheles_processed3 <-
   anopheles_processed2 %>%
   dplyr::filter(species %in% species_with_100$species) %>% 
@@ -188,7 +190,6 @@ current_layer <-
   res = 10,
   path = getwd()
 )
-class(current_layer)
 
 current <- 
   crop_raster_cmip6(
@@ -411,7 +412,7 @@ legend(
 
 dev.off()
 
-# PCs used were pc: 1, 2, 3, 4, 
+# PCs used were pc: 1, 2, 3, 4 
 dir_create("data/workflow_maxent/an_albimanus/Model_calibration")
 dir_create("data/workflow_maxent/an_albimanus/Model_calibration/PCs_M")
 
