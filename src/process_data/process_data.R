@@ -13,6 +13,7 @@ library(ellipsenm)
 library(kuenm)
 library(ntbox)
 
+
 source("src/functions.R")
 
 df <-
@@ -39,8 +40,8 @@ occ_anopheles <- occ_download(
   pred_in("taxonKey", keys),
   pred("hasCoordinate", TRUE),
   format = "SIMPLE_CSV",
-  user = Sys.getenv('user'), pwd = Sys.getenv('pwd'),
-  email = Sys.getenv('email')
+  user = Sys.getenv('USER_GBIF'), pwd = Sys.getenv('PWD_GBIF'),
+  email = Sys.getenv('EMAIL')
 )
 
 all_species <- 
